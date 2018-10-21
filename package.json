@@ -19,6 +19,8 @@
   "homepage": "https://github.com/MIClavelTe/RestAPI_1#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
-    "express": "^4.13.4"
-  }
+    "express": "^4.13.4",
+    "morgan": "^1.7.0"
+  },
+  "devDependencies": {}
 }

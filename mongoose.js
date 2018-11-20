@@ -16,7 +16,8 @@ db.once('open', function() {
         name: {type: String, default: 'Rapunzel'},
         prince: {type: String, default: 'Flynn Rider'},
         ability: {type: String, default: 'Magic Hair'},
-        dream: String
+        dream: String,
+        favColor: {type: String, default: 'Purple'}
     });
 
     PrincessSchema.pre('save', function(next) {
@@ -30,12 +31,17 @@ db.once('open', function() {
         next();
     });
 
+    PrincessSchema.statics.findDream = function(dream, callback) {
+        return this.find({dream: dream}, callback)
+    };
+
     var Princess = mongoose.model("Princess", PrincessSchema);
 
     var Ariel = new Princess({
         name: 'Ariel',
         prince: 'Eric',
-        ability: 'Her Voice'
+        ability: 'Her Voice',
+        favColor: 'Green'
     });
 
     var princess = new Princess({});
@@ -43,13 +49,14 @@ db.once('open', function() {
     var Jasmine = new Princess({
         name: 'Jasmine',
         prince: 'Aladdin',
-        ability: 'A Magic Carpet'
+        ability: 'A Magic Carpet',
+        favColor: 'Blue'
     });
 
     var princessData = [
-        { name: 'Belle', prince: 'Adam', ability: 'To Read' },
-        { name: 'Mulan', prince: 'Shang', ability: 'To Fight'},
-        { name: 'Pocahontas', prince: 'John Smith', ability: 'Colors of the wind'},
+        { name: 'Belle', prince: 'Adam', ability: 'To Read', favColor: 'Yellow'},
+        { name: 'Mulan', prince: 'Shang', ability: 'To Fight', favColor: 'Green'},
+        { name: 'Pocahontas', prince: 'John Smith', ability: 'Colors of the wind', favColor: 'Yellow'},
         Ariel, princess, Jasmine
     ];
 
@@ -57,7 +64,7 @@ db.once('open', function() {
         if (err) console.error(err);
         Princess.create(princessData, function(err, princesses) {
             if (err) console.error(err);
-            Princess.find({}, function(err, princesses) {
+            Princess.findDream('peace on land', function(err, princesses) {
                 princesses.forEach(function(princess) {
                     console.log(`${princess.name}'s dream is ${princess.dream}`);
                 });

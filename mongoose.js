@@ -35,6 +35,10 @@ db.once('open', function() {
         return this.find({dream: dream}, callback)
     };
 
+    PrincessSchema.methods.findPrince = function(prince, callback) {
+        return this.model("Princess").find({prince: prince}, callback)
+    };
+
     var Princess = mongoose.model("Princess", PrincessSchema);
 
     var Ariel = new Princess({
@@ -64,13 +68,17 @@ db.once('open', function() {
         if (err) console.error(err);
         Princess.create(princessData, function(err, princesses) {
             if (err) console.error(err);
-            Princess.findDream('peace on land', function(err, princesses) {
-                princesses.forEach(function(princess) {
-                    console.log(`${princess.name}'s dream is ${princess.dream}`);
+            Princess.findOne({name: 'Ariel'}, function(err, Ariel) {
+                Ariel.findPrince('Eric', function(err, princesses) {
+                    if (err) console.log(err);
+                    princesses.forEach(function(princess) {
+                        console.log(`${princess.name}'s prince is ${princess.prince}`);
+                    });
+                    db.close(function() {
+                        console.log('Connection Closed');
+                    }); 
                 });
-                db.close(function() {
-                    console.log('Connection Closed');
-                }); 
+                
             });
         });                   
     });   

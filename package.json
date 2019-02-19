@@ -1,7 +1,7 @@
 {
-  "name": "RestAPI_1",
+  "name": "restapi_3",
   "version": "1.0.0",
-  "description": "Building API Routes in Express",
+  "description": "Completing and testing the API",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

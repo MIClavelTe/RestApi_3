@@ -2,23 +2,46 @@
 var express = require('express');
 var router = express.Router();
 
+var Question = require('../model').Question;
+
+router.param("qID", function(req, res, next, id) {
+    Question.findById(id, function(err, doc) {
+        if (err) return next(err);
+        if (!doc) {
+            err = new Error('Not Found');
+            err.status = 404;
+            return next(err);
+        }
+        req.question = doc;
+        return next();
+    });
+});
+
 //GET /questions
-router.get('/', function(req, res) {
-    res.json({response: 'Sent a GET request to /questions'});
+router.get('/', function(req, res, next) {
+    Question.find({}) 
+        .sort({createdAt: -1})
+        .exec(function(err, questions) {
+            if (err) return next(err);
+            res.json(questions);
+    });
 });
 
 //POST /questions
-router.post('/', function(req, res) {
-    res.json({
-        response: 'Sent a POST request to /questions',
-        body: req.body
+router.post('/', function(req, res, next) {
+    var question = new Question(req.body);
+    question.save(function(err, question) {
+        if (err) return next(err);
+        res.status(201);
+        res.json(question);
     });
 });
 
 //GET /questions/:qID
-router.get('/:qID', function(req, res) {
-    res.json({
-        response: 'Sent a GET request for /questions/' + req.params.qID
+router.get('/:qID', function(req, res, next) {
+    Question.findById(req.params.qID, function(err, doc) {
+        if (err) return next(err);
+        res.json(doc);
     });
 });
 
